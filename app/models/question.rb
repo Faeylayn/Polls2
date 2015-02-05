@@ -19,8 +19,30 @@ class Question < ActiveRecord::Base
 
   def results
     answers = self.answer_choices.includes(:responses)
+    results = {}
 
-    answers
+    answers.each do |answer|
+      results[answer.answer] = answer.responses.length
+    end
+
+    results
+  end
+
+  def results_one_query
+
+    results = self.answer_choices
+      .select("answer_choices.*, COUNT(responses.id) AS answer_count")
+      .joins("LEFT OUTER JOIN responses ON answer_choices.id = responses.answer_id")
+      .group("answer_choices.id")
+
+    output = {}
+
+    results.each do |result|
+      output[result.answer] = result.answer_count
+    end
+
+    output
+
 
 
 
