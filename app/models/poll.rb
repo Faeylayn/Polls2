@@ -13,6 +13,7 @@ class Poll < ActiveRecord::Base
       :primary_key => :id
   )
 
+has_many :responses, :through => :questions, :source => :responses
 
 
 end
