@@ -9,11 +9,20 @@ class Question < ActiveRecord::Base
   )
 
   has_many(:answer_choices,
-      :class_name => "AnswerChoices",
+      :class_name => "AnswerChoice",
       :foreign_key => :q_id,
       :primary_key => :id
   )
 
+  has_many :responses, :through => :answer_choices, :source => :responses
 
 
+  def results
+    answers = self.answer_choices.includes(:responses)
+
+    answers
+
+
+
+  end
 end
